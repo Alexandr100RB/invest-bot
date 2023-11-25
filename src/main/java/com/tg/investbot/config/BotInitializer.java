@@ -12,7 +12,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 /**
  * TODO javadoc
  *
- * @author Alexey Chuyko (aachuyko@yoomoney.ru)
  * @since 24.11.2023
  */
 @Component

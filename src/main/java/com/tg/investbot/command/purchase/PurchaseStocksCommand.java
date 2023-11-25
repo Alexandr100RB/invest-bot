@@ -14,7 +14,6 @@ import static com.tg.investbot.command.registry.UserCommandName.PURCHASE;
 /**
  * TODO javadoc
  *
- * @author Alexey Chuyko (aachuyko@yoomoney.ru)
  * @since 24.11.2023
  */
 @Component

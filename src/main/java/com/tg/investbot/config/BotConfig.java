@@ -8,7 +8,6 @@ import org.springframework.context.annotation.PropertySource;
 /**
  * Конфигурация бота
  *
- * @author Alexey Chuyko (aachuyko@yoomoney.ru)
  * @since 24.11.2023
  */
 @Configuration
