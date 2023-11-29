@@ -49,6 +49,7 @@ public class InvestBot extends TelegramLongPollingBot {
                 UserCommandName commandName = UserCommandName.byCode(parameters[0]).orElseThrow();
                 COMMAND_REGISTRY.get(commandName).execute(chatId, messageText);
             } catch (RuntimeException | TelegramApiException e) {
+                log.error("Error while message sending: error=", e);
                 sendMessage(chatId, "Что-то пошло не так, попробуйте ввести команду снова");
             }
         }

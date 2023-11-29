@@ -1,4 +1,4 @@
-package com.tg.investbot.command.purchase;
+package com.tg.investbot.command.buy;
 
 import com.tg.investbot.bot.InvestBot;
 import com.tg.investbot.command.UserCommand;

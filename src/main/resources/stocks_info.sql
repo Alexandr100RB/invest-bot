@@ -1,0 +1,6 @@
+CREATE TABLE stocks_info (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    chat_id BIGINT NOT NULL,
+    ticket VARCHAR NOT NULL,
+    count BIGINT NOT NULL
+)
