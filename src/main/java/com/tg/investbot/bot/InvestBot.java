@@ -1,17 +1,18 @@
 package com.tg.investbot.bot;
 
+import com.tg.investbot.command.registry.UserCommandName;
 import com.tg.investbot.config.BotConfig;
 import com.tg.investbot.model.Buttons;
-import com.tg.investbot.model.CurrencyModel;
-import com.tg.investbot.service.CurrencyService;
+import org.apache.commons.logging.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.text.ParseException;
+import static com.tg.investbot.command.registry.Registry.COMMAND_REGISTRY;
 
 /**
  * TODO javadoc
@@ -20,10 +21,12 @@ import java.text.ParseException;
  */
 @Component
 public class InvestBot extends TelegramLongPollingBot {
+    private static final Logger log = LoggerFactory.getLogger(InvestBot.class);
     private final BotConfig botConfig;
 
     public InvestBot(BotConfig botConfig) {
         this.botConfig = botConfig;
+
     }
 
     @Override
@@ -38,51 +41,29 @@ public class InvestBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        CurrencyModel currencyModel = new CurrencyModel();
-        String currency = "";
-
         if(update.hasMessage() && update.getMessage().hasText()){
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
-
-            switch (messageText) {
-                case "/start":
-                    startCommandReceived(chatId, update.getMessage().getChat().getFirstName());
-                    break;
-                default:
-                    try {
-                        currency = CurrencyService.getCurrencyRate(messageText, currencyModel);
-                    } catch (IOException e) {
-                        sendMessage(chatId, "We have not found such a currency." + "\n" +
-                                "Enter the currency whose official exchange rate" + "\n" +
-                                "you want to know in relation to BYN." + "\n" +
-                                "For example: USD");
-                    } catch (ParseException e) {
-                        throw new RuntimeException("Unable to parse date");
-                    }
-                    sendMessage(chatId, currency);
+            var parameters = messageText.split(" ");
+            try {
+                UserCommandName commandName = UserCommandName.byCode(parameters[0]).orElseThrow();
+                COMMAND_REGISTRY.get(commandName).execute(chatId, messageText);
+            } catch (RuntimeException | TelegramApiException e) {
+                sendMessage(chatId, "Что-то пошло не так, попробуйте ввести команду снова");
             }
         }
-
     }
 
-    private void startCommandReceived(Long chatId, String name) {
-        String answer = "Hi, " + name + ", nice to meet you!" + "\n" +
-                "Enter the currency whose official exchange rate" + "\n" +
-                "you want to know in relation to BYN." + "\n" +
-                "For example: USD";
-        sendMessage(chatId, answer);
-    }
-
-    private void sendMessage(Long chatId, String textToSend){
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText(textToSend);
-        sendMessage.setReplyMarkup(Buttons.inlineMarkup());
+    public void sendMessage(long chatId, String textMessage) {
         try {
-            execute(sendMessage);
+            execute(SendMessage.builder()
+                    .text(textMessage)
+                    .chatId(chatId)
+                    .replyMarkup(Buttons.inlineMarkup())
+                    .build()
+            );
         } catch (TelegramApiException e) {
-
+            log.error("Error while message sending: error=%s", e);
         }
     }
 }

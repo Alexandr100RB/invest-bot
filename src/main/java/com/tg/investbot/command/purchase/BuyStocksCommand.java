@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static com.tg.investbot.command.registry.Registry.registry;
+import static com.tg.investbot.command.registry.Registry.COMMAND_REGISTRY;
 import static com.tg.investbot.command.registry.UserCommandName.PURCHASE;
 
 /**
@@ -17,26 +17,26 @@ import static com.tg.investbot.command.registry.UserCommandName.PURCHASE;
  * @since 24.11.2023
  */
 @Component
-public class PurchaseStocksCommand implements UserCommand<PurchaseStocksData> {
+public class BuyStocksCommand implements UserCommand {
     private final InvestBot investBot;
 
     @Autowired
-    public PurchaseStocksCommand(InvestBot investBot) {
+    public BuyStocksCommand(InvestBot investBot) {
         this.investBot = investBot;
-        registry.put(PURCHASE, this);
+        COMMAND_REGISTRY.put(PURCHASE, this);
     }
 
     @Override
-    public void execute(PurchaseStocksData commandData) {
+    public void execute(long chatId, String message) throws TelegramApiException {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
-        sendMessage.setText(textToSend);
+        sendMessage.setText(message);
         sendMessage.setReplyMarkup(Buttons.inlineMarkup());
         try {
             investBot.execute(sendMessage);
         } catch (TelegramApiException e) {
 
         }
-        investBot.execute()
+        investBot.execute(sendMessage);
     }
 }

@@ -11,8 +11,5 @@ import java.util.Map;
  * @since 24.11.2023
  */
 public class Registry {
-    public static final Map<UserCommandName, UserCommand> registry;
-    static {
-        registry = new HashMap<>();
-    }
+    public static final Map<UserCommandName, UserCommand> COMMAND_REGISTRY = new HashMap<>();
 }

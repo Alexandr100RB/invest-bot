@@ -17,15 +17,12 @@ public class Buttons {
     public static InlineKeyboardMarkup inlineMarkup() {
         START_BUTTON.setCallbackData("/start");
         HELP_BUTTON.setCallbackData("/help");
-
-//        List rowInline = List.of(START_BUTTON, HELP_BUTTON);
-//        List rowsInLine = List.of(rowInline);
-
+        START_BUTTON.setText("Start");
         InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
         markupInline.setKeyboard(
                 List.of(
-                        List.of(START_BUTTON, HELP_BUTTON),
-                        List.of(START_BUTTON, HELP_BUTTON))
+                        List.of(START_BUTTON)
+                )
         );
 
         return markupInline;
