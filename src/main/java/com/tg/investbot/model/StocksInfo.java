@@ -28,11 +28,23 @@ public class StocksInfo {
     @Column (name = "id", nullable = false)
     private String id;
 
-    public StocksInfo(String ticker, String quantity, String buyPrice, String id) {
+    @Column (name = "chat_id", nullable = false)
+    private Long chatId;
+
+    public StocksInfo(String ticker,
+                      String quantity,
+                      String buyPrice,
+                      String id,
+                      Long chatId) {
         this.ticker = ticker;
         this.quantity = quantity;
         this.buyPrice = buyPrice;
         this.id = id;
+        this.chatId = chatId;
+    }
+
+    public Long getChatId() {
+        return chatId;
     }
 
     public StocksInfo() {
@@ -69,6 +81,7 @@ public class StocksInfo {
         private String quantity;
         private String buyPrice;
         private String id;
+        private Long chatId;
 
         private StocksInfoBuilder() {
         }
@@ -97,8 +110,13 @@ public class StocksInfo {
             return this;
         }
 
+        public StocksInfoBuilder withChatId(Long chatId) {
+            this.chatId = chatId;
+            return this;
+        }
+
         public StocksInfo build() {
-            return new StocksInfo(ticker, quantity, buyPrice, id);
+            return new StocksInfo(ticker, quantity, buyPrice, id, chatId);
         }
     }
 }

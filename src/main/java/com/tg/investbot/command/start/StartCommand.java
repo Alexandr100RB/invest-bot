@@ -2,16 +2,15 @@ package com.tg.investbot.command.start;
 
 import com.tg.investbot.bot.InvestBot;
 import com.tg.investbot.command.UserCommand;
-import com.tg.investbot.command.registry.UserCommandName;
+import com.tg.investbot.registry.UserCommandName;
 import com.tg.investbot.model.StocksInfo;
 import com.tg.investbot.repository.StocksInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.util.List;
 
-import static com.tg.investbot.command.registry.Registry.COMMAND_REGISTRY;
+import static com.tg.investbot.registry.Registry.COMMAND_REGISTRY;
 
 /**
  * TODO javadoc
@@ -35,10 +34,13 @@ public class StartCommand implements UserCommand {
     @Override
     public void execute(long chatId, String message) {
         List<StocksInfo> stocksList = stocksInfoRepository.findAll();
+        if (stocksList.isEmpty()) {
+            investBot.sendMessage(chatId, "Список пуст");
+            return;
+        }
         for (StocksInfo stock: stocksList) {
             investBot.sendMessage(chatId, "Куплено " + stock.getQuantity()
                     + " шт " + stock.getTicker()+ " по " + stock.getBuyPrice());
         }
-        //investBot.sendMessage(chatId, stocksInfoRepository.findAll().toString());
     }
 }

@@ -1,4 +1,4 @@
-package com.tg.investbot.command.registry;
+package com.tg.investbot.registry;
 
 import java.util.Arrays;
 import java.util.Optional;

@@ -1,6 +1,7 @@
-CREATE TABLE stocks_info (
+CREATE TABLE stocks (
     id BIGSERIAL NOT NULL PRIMARY KEY,
     chat_id BIGINT NOT NULL,
-    ticket VARCHAR NOT NULL,
-    count BIGINT NOT NULL
+    ticker VARCHAR NOT NULL,
+    quantity BIGINT NOT NULL,
+    buy_price NUMERIC NOT NULL
 )
