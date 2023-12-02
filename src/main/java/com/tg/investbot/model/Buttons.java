@@ -17,15 +17,26 @@ import java.util.List;
  */
 public class Buttons {
     private static final KeyboardButton START_BUTTON = new KeyboardButton("/start");
+    private static final KeyboardButton MY_STOCKS_BUTTON = new KeyboardButton("/my_stocks");
+    private static final KeyboardButton BUY_BUTTON = new KeyboardButton("/buy");
+    private static final KeyboardButton SELL_BUTTON = new KeyboardButton("/sell");
 
-    public static ReplyKeyboardMarkup inlineMarkup() {
+    public static ReplyKeyboardMarkup replyMarkup() {
         List<KeyboardRow> keyboard = new ArrayList<>();
 
         KeyboardRow keyboardFirstRow = new KeyboardRow();
         keyboardFirstRow.add(START_BUTTON);
+        keyboardFirstRow.add(MY_STOCKS_BUTTON);
         keyboard.add(keyboardFirstRow);
+        KeyboardRow keyboardSecondRow = new KeyboardRow();
+        keyboardSecondRow.add(BUY_BUTTON);
+        keyboardSecondRow.add(SELL_BUTTON);
+        keyboard.add(keyboardSecondRow);
 
         ReplyKeyboardMarkup markupInline = new ReplyKeyboardMarkup();
+        markupInline.setSelective(true);
+        markupInline.setResizeKeyboard(true);
+        markupInline.setOneTimeKeyboard(false);
         markupInline.setKeyboard(keyboard);
 
         return markupInline;

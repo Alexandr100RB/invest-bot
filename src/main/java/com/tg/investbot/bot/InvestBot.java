@@ -60,7 +60,7 @@ public class InvestBot extends TelegramLongPollingBot {
             execute(SendMessage.builder()
                     .text(textMessage)
                     .chatId(chatId)
-                    .replyMarkup(Buttons.inlineMarkup())
+                    .replyMarkup(Buttons.replyMarkup())
                     .build()
             );
         } catch (TelegramApiException e) {

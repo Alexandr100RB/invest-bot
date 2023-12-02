@@ -31,7 +31,7 @@ public class BuyStocksCommand implements UserCommand {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(message);
-        sendMessage.setReplyMarkup(Buttons.inlineMarkup());
+        sendMessage.setReplyMarkup(Buttons.replyMarkup());
         try {
             investBot.execute(sendMessage);
         } catch (TelegramApiException e) {
