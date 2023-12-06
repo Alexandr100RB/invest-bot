@@ -13,6 +13,7 @@ java {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -27,10 +28,7 @@ dependencies {
 	implementation group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.4'
 	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
 
-	implementation 'ru.tinkoff.piapi:java-sdk-core:1.5'
-	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.9.0'
-	implementation group: 'ru.tinkoff.invest', name: 'openapi-java-sdk-java8', version: '0.5.2'
-
+	implementation 'com.github.crazzyghost:alphavantage-java:1.6.1'
 }
 
 tasks.named('test') {
