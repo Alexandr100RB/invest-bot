@@ -3,6 +3,10 @@ package com.tg.investbot.command.buy;
 import com.tg.investbot.bot.InvestBot;
 import com.tg.investbot.client.StocksClient;
 import com.tg.investbot.command.UserCommand;
+import com.tg.investbot.helper.CommandHelper;
+import com.tg.investbot.model.PriceInfo;
+import com.tg.investbot.model.StocksInfo;
+import com.tg.investbot.repository.StocksInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +22,38 @@ public class BuyStocksCommand implements UserCommand {
     private static final Logger log = LoggerFactory.getLogger(BuyStocksCommand.class);
     private final InvestBot investBot;
     private final StocksClient stocksClient;
+    private final StocksInfoRepository stocksInfoRepository;
+
+
 
     @Autowired
     public BuyStocksCommand(InvestBot investBot,
-                            StocksClient stocksClient) {
+                            StocksClient stocksClient,
+                            StocksInfoRepository stocksInfoRepository) {
         this.investBot = investBot;
         this.stocksClient = stocksClient;
+        this.stocksInfoRepository = stocksInfoRepository;
         COMMAND_REGISTRY.put(PURCHASE, this);
     }
 
     @Override
     public void execute(long chatId, String message) {
-        var response = stocksClient.getPrice(
-                getTicker(message), System.getenv("twelvedataToken")
+        String ticker = getTicker(message);
+        PriceInfo response = stocksClient.getPrice(
+                ticker, System.getenv("twelvedataToken")
         );
-        var price = response;
-        log.info("response={}", price.toString());
-        investBot.sendMessage(chatId, price.getPrice());
+        log.info("response={}", response.toString());
+        Integer quantity = CommandHelper.getCount(message);
+        Double price = Double.parseDouble(response.getPrice());
+        stocksInfoRepository.save(
+                StocksInfo.StocksInfoBuilder.aStocksInfo()
+                        .withBuyPrice(price)
+                        .withChatId(chatId)
+                        .withQuantity(quantity)
+                        .withTicker(ticker)
+                        .build()
+        );
+        investBot.sendMessage(chatId, "Мы купили " + quantity + " акций "
+                + ticker + " по " + price);
     }
 }

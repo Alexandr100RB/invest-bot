@@ -1,9 +1,7 @@
 package com.tg.investbot.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.context.annotation.Primary;
 
 /**
  * TODO javadoc
@@ -12,19 +10,20 @@ import jakarta.persistence.Table;
  */
 
 @Entity
-@Table(name = "stocks")
+@Table(name = "stocks", schema = "public")
 public class StocksInfo {
 
     @Column (name = "ticker")
     private String ticker;
 
     @Column (name = "quantity", nullable = false)
-    private String quantity;
+    private Integer quantity;
 
     @Column (name = "buy_price", nullable = false)
-    private String buyPrice;
+    private Double buyPrice;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column (name = "id", nullable = false)
     private String id;
 
@@ -32,8 +31,8 @@ public class StocksInfo {
     private Long chatId;
 
     public StocksInfo(String ticker,
-                      String quantity,
-                      String buyPrice,
+                      Integer quantity,
+                      Double buyPrice,
                       String id,
                       Long chatId) {
         this.ticker = ticker;
@@ -54,11 +53,11 @@ public class StocksInfo {
         return ticker;
     }
 
-    public String getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public String getBuyPrice() {
+    public Double getBuyPrice() {
         return buyPrice;
     }
 
@@ -78,8 +77,8 @@ public class StocksInfo {
 
     public static final class StocksInfoBuilder {
         private String ticker;
-        private String quantity;
-        private String buyPrice;
+        private Integer quantity;
+        private Double buyPrice;
         private String id;
         private Long chatId;
 
@@ -95,12 +94,12 @@ public class StocksInfo {
             return this;
         }
 
-        public StocksInfoBuilder withQuantity(String quantity) {
+        public StocksInfoBuilder withQuantity(Integer quantity) {
             this.quantity = quantity;
             return this;
         }
 
-        public StocksInfoBuilder withBuyPrice(String buyPrice) {
+        public StocksInfoBuilder withBuyPrice(Double buyPrice) {
             this.buyPrice = buyPrice;
             return this;
         }
