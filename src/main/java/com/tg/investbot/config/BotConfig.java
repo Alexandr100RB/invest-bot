@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
  * @since 24.11.2023
  */
 @Configuration
-@PropertySource("classpath:/application.properties")
+@PropertySource("classpath:/application.yml")
 public class BotConfig {
     @Value("${bot.name}")
     private String botName;
