@@ -13,5 +13,6 @@ import java.util.List;
 @Repository
 public interface StocksInfoRepository extends JpaRepository<StocksInfo, String> {
     List<StocksInfo> findAll();
-    
+
+    List<StocksInfo> findStocksInfosByChatId(long chat_id);
 }

@@ -11,7 +11,9 @@ import java.util.Optional;
 public enum UserCommandName {
     START("/start"),
     GET("/get"),
-    PURCHASE("/buy");
+    PURCHASE("/buy"),
+    HELP("Помощь");
+
     private final String code;
 
     UserCommandName(String code) {
