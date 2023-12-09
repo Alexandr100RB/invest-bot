@@ -25,8 +25,8 @@ public class InvestBot extends TelegramLongPollingBot {
     private final BotConfig botConfig;
 
     public InvestBot(BotConfig botConfig) {
+        super(botConfig.getToken());
         this.botConfig = botConfig;
-
     }
 
     @Override
@@ -56,6 +56,7 @@ public class InvestBot extends TelegramLongPollingBot {
 
     public void sendMessage(long chatId, String textMessage) {
         try {
+            log.info("Sending message: chatId={}", chatId);
             execute(SendMessage.builder()
                     .text(textMessage)
                     .chatId(chatId)

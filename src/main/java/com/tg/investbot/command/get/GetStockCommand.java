@@ -1,20 +1,14 @@
 package com.tg.investbot.command.get;
 
 import com.tg.investbot.bot.InvestBot;
-import com.tg.investbot.client.StocksClient;
 import com.tg.investbot.command.UserCommand;
-import com.tg.investbot.command.buy.BuyStocksCommand;
-import com.tg.investbot.helper.CommandHelper;
-import com.tg.investbot.model.PriceInfo;
+import com.tg.investbot.model.StockPrice;
 import com.tg.investbot.model.StocksInfo;
-import com.tg.investbot.registry.Registry;
 import com.tg.investbot.registry.UserCommandName;
 import com.tg.investbot.repository.StocksInfoRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.tg.investbot.service.TinkoffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
@@ -25,15 +19,15 @@ import static com.tg.investbot.registry.Registry.COMMAND_REGISTRY;
 public class GetStockCommand implements UserCommand {
 
     private final InvestBot investBot;
-    private final StocksClient stocksClient;
     private final StocksInfoRepository stocksInfoRepository;
+    private final TinkoffService tinkoffService;
 
     @Autowired
     public GetStockCommand(InvestBot investBot,
-                           StocksClient stocksClient,
-                           StocksInfoRepository stocksInfoRepository) {
+                           StocksInfoRepository stocksInfoRepository,
+                           TinkoffService tinkoffService) {
         this.investBot = investBot;
-        this.stocksClient = stocksClient;
+        this.tinkoffService = tinkoffService;
         this.stocksInfoRepository = stocksInfoRepository;
         COMMAND_REGISTRY.put(UserCommandName.GET, this);
     }
@@ -45,13 +39,19 @@ public class GetStockCommand implements UserCommand {
             investBot.sendMessage(chatId, "Список пуст");
             return;
         }
-        for (StocksInfo stock: stocksList) {
-            PriceInfo response = stocksClient.getPrice(
-                    stock.getTicker(), System.getenv("twelvedataToken")
-            );
-            investBot.sendMessage(chatId, "Куплено " + stock.getQuantity()
-                    + " шт " + stock.getTicker()+ " по " + stock.getBuyPrice() +
-                    ", сейчас цена " + response.getPrice());
+        var stockPrices = stocksInfoRepository.countAverageSumByTicker(chatId);
+        StringBuilder responseMessage = new StringBuilder();
+        for (StockPrice stockPrice: stockPrices) {
+            var price = tinkoffService.getPriceByTicker(stockPrice.getTicker());
+            if (price.isEmpty()) {
+                return;
+            }
+            responseMessage.append("Куплено " + stockPrice.getCount()
+                    + " шт " + stockPrice.getTicker()
+                    + " по средней цене " + stockPrice.getAvgPrice() +
+                    ", сейчас цена " + price.get() + ".\n");
         }
+
+        investBot.sendMessage(chatId, responseMessage.toString());
     }
 }
