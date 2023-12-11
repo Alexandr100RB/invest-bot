@@ -3,7 +3,7 @@ package com.tg.investbot.command.get;
 import com.tg.investbot.bot.InvestBot;
 import com.tg.investbot.command.UserCommand;
 import com.tg.investbot.model.StockPrice;
-import com.tg.investbot.model.StocksInfo;
+import com.tg.investbot.model.StockInfo;
 import com.tg.investbot.registry.UserCommandName;
 import com.tg.investbot.repository.StocksInfoRepository;
 import com.tg.investbot.service.TinkoffService;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.tg.investbot.helper.CommandHelper.getTicker;
 import static com.tg.investbot.registry.Registry.COMMAND_REGISTRY;
 
 @Component
@@ -34,7 +33,7 @@ public class GetStockCommand implements UserCommand {
 
     @Override
     public void execute(long chatId, String message) {
-        List<StocksInfo> stocksList = stocksInfoRepository.findStocksInfosByChatId(chatId);
+        List<StockInfo> stocksList = stocksInfoRepository.findStocksInfosByChatId(chatId);
         if (stocksList.isEmpty()) {
             investBot.sendMessage(chatId, "Список пуст");
             return;

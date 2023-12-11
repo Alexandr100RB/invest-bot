@@ -3,7 +3,7 @@ package com.tg.investbot.command.buy;
 import com.tg.investbot.bot.InvestBot;
 import com.tg.investbot.command.UserCommand;
 import com.tg.investbot.helper.CommandHelper;
-import com.tg.investbot.model.StocksInfo;
+import com.tg.investbot.model.StockInfo;
 import com.tg.investbot.repository.StocksInfoRepository;
 import com.tg.investbot.service.TinkoffService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class BuyStocksCommand implements UserCommand {
 
         Integer quantity = CommandHelper.getCount(message);
         stocksInfoRepository.save(
-                StocksInfo.StocksInfoBuilder.aStocksInfo()
+                StockInfo.StocksInfoBuilder.aStocksInfo()
                         .withBuyPrice(Double.valueOf(priceT.get()))
                         .withChatId(chatId)
                         .withQuantity(quantity)

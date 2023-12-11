@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "stocks", schema = "public")
-public class StocksInfo {
+public class StockInfo {
 
     @Column (name = "ticker")
     private String ticker;
@@ -34,11 +34,11 @@ public class StocksInfo {
     @Column (name = "chat_id", nullable = false)
     private Long chatId;
 
-    public StocksInfo(String ticker,
-                      Integer quantity,
-                      Double buyPrice,
-                      String id,
-                      Long chatId) {
+    public StockInfo(String ticker,
+                     Integer quantity,
+                     Double buyPrice,
+                     String id,
+                     Long chatId) {
         this.ticker = ticker;
         this.quantity = quantity;
         this.buyPrice = buyPrice;
@@ -50,7 +50,7 @@ public class StocksInfo {
         return chatId;
     }
 
-    public StocksInfo() {
+    public StockInfo() {
     }
 
     public String getTicker() {
@@ -119,8 +119,8 @@ public class StocksInfo {
             return this;
         }
 
-        public StocksInfo build() {
-            return new StocksInfo(ticker, quantity, buyPrice, id, chatId);
+        public StockInfo build() {
+            return new StockInfo(ticker, quantity, buyPrice, id, chatId);
         }
     }
 }

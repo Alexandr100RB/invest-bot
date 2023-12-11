@@ -15,7 +15,8 @@ import java.util.List;
 public class Buttons {
     private static final KeyboardButton START_BUTTON = new KeyboardButton("/start");
     private static final KeyboardButton MY_STOCKS_BUTTON = new KeyboardButton("/get");
-    private static final KeyboardButton HELP_BUTTON = new KeyboardButton("Помощь");
+    private static final KeyboardButton HELP_BUTTON = new KeyboardButton("/help");
+
 
     public static ReplyKeyboardMarkup replyMarkup() {
         List<KeyboardRow> keyboard = new ArrayList<>();

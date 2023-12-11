@@ -12,7 +12,7 @@ public enum UserCommandName {
     START("/start"),
     GET("/get"),
     PURCHASE("/buy"),
-    HELP("Помощь");
+    HELP("/help");
 
     private final String code;
 
