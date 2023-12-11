@@ -1,7 +1,6 @@
 package com.tg.investbot.bot;
 
 import com.tg.investbot.registry.UserCommandName;
-import com.tg.investbot.config.BotConfig;
 import com.tg.investbot.model.Buttons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,21 +21,21 @@ import static com.tg.investbot.registry.Registry.COMMAND_REGISTRY;
 @Component
 public class InvestBot extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(InvestBot.class);
-    private final BotConfig botConfig;
 
-    public InvestBot(BotConfig botConfig) {
-        this.botConfig = botConfig;
+    private static final String BOT_NAME = "fake_invest_bot";
 
+    public InvestBot() {
+        super(System.getenv("botToken"));
     }
 
     @Override
     public String getBotUsername() {
-        return botConfig.getBotName();
+        return BOT_NAME;
     }
 
     @Override
     public String getBotToken() {
-        return botConfig.getToken();
+        return System.getenv("botToken");
     }
 
     @Override
@@ -56,6 +55,7 @@ public class InvestBot extends TelegramLongPollingBot {
 
     public void sendMessage(long chatId, String textMessage) {
         try {
+            log.info("Sending message: chatId={}", chatId);
             execute(SendMessage.builder()
                     .text(textMessage)
                     .chatId(chatId)
