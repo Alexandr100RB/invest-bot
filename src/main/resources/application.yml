@@ -1,7 +1,3 @@
-bot:
-  name:
-    fake_invest_bot
-  token: 6452009533:AAF0yecYWj78cHuCsH77J--XLzT048k_bDM
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/investBotDB

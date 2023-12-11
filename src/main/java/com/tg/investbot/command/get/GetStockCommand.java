@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.tg.investbot.registry.Registry.COMMAND_REGISTRY;
 
@@ -43,12 +44,16 @@ public class GetStockCommand implements UserCommand {
         for (StockPrice stockPrice: stockPrices) {
             var price = tinkoffService.getPriceByTicker(stockPrice.getTicker());
             if (price.isEmpty()) {
-                return;
+                continue;
+            }
+            Optional<String> currency = tinkoffService.getCurrencyByTicker(stockPrice.getTicker());
+            if (currency.isEmpty()) {
+                continue;
             }
             responseMessage.append("Куплено " + stockPrice.getCount()
                     + " шт " + stockPrice.getTicker()
                     + " по средней цене " + stockPrice.getAvgPrice() +
-                    ", сейчас цена " + price.get() + ".\n");
+                    ", сейчас цена " + price.get() + currency.get() + ".\n");
         }
 
         investBot.sendMessage(chatId, responseMessage.toString());

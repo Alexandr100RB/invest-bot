@@ -33,7 +33,7 @@ public class BuyStocksCommand implements UserCommand {
     @Override
     public void execute(long chatId, String message) {
         String ticker = getTicker(message);
-        var priceT = tinkoffService.getPriceByTicker(getTicker(message));
+        var priceT = tinkoffService.getPriceByTicker(ticker);
         if (priceT.isEmpty()) {
             investBot.sendMessage(chatId, "Не удалось получить стоимость акции.");
         }
