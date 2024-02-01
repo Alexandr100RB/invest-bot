@@ -3,7 +3,6 @@ package com.tg.investbot.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.piapi.contract.v1.Share;
 import ru.tinkoff.piapi.core.InvestApi;
@@ -24,6 +23,10 @@ public class TinkoffService {
     public TinkoffService(InvestApi investApi) {
         this.investApi = investApi;
         this.shareList = investApi.getInstrumentsService().getTradableSharesSync();
+    }
+
+    public List<Share> getShareList() {
+        return shareList;
     }
 
     public Optional<String> getPriceByTicker(String ticker) {
@@ -49,15 +52,18 @@ public class TinkoffService {
     }
 
     public Optional<String> getCurrencyByTicker(String ticker) {
-        log.info("Start tinkoff api process: ticker={}", ticker);
-        var shareByTicker = shareList.stream()
-                .filter(share -> ticker.equals(share.getTicker()))
-                .findFirst();
+        var shareByTicker = getShareByTicker(ticker);
         if (shareByTicker.isEmpty()) {
             log.info("Not tradable stock: stock={}", ticker);
             return Optional.empty();
         }
-
         return Optional.of(shareByTicker.get().getCurrency());
+    }
+
+    public Optional<Share> getShareByTicker(String ticker) {
+        log.info("Start tinkoff api process: ticker={}", ticker);
+        return shareList.stream()
+                .filter(share -> ticker.equals(share.getTicker()))
+                .findFirst();
     }
 }
